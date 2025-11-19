@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>닮은 웹툰 캐릭터 찾기 - 코코 에디션</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+      background: #FFFCEB; /* 파스텔 노랑 */
+      color: #5A4A30; /* 코코 느낌의 브라운 */
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #5A4A30;
+    }
+
+    p.desc {
+      font-size: 0.95rem;
+      color: #7A6A50;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #FFF8D8; /* 코코 같은 크림 톤 */
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 2px solid #F3E9BD;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #5A4A30;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 14px;
+    }
+
+    #myPhoto {
+      background: #FFF3C4; 
+      min-height: 200px;
+      object-fit: cover;
+      border: 2px dashed #E4D4A0;
+    }
+
+    input[type="file"] {
+      margin-top: 12px;
+      width: 100%;
+      font-size: 0.9rem;
+      color: #5A4A30;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: none;
+      background: #FFD873; /* 코코 느낌 노랑 */
+      color: #5A4A30;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    button:hover:not(:disabled) {
+      background: #FFCC4A;
+      transform: translateY(-1px);
+      transition: 0.1s ease-out;
+    }
+
+    button:disabled {
+      background: #E0D2AC;
+      cursor: not-allowed;
+    }
+
+    #resultText {
+      min-height: 2.5em;
+      font-size: 1.05rem;
+      margin-top: 12px;
+      font-weight: 700;
+      color: #5A4A30;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      color: #7A6A50;
+      margin-top: 6px;
+      min-height: 2em;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #FFF1C4;
+      font-size: 0.75rem;
+      color: #6C5A3B;
+      margin-top: 10px;
+      border: 1px solid #EAD9A3;
+    }
+
+    .footer {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: #9C8F75;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <h1>코코 닮은꼴 테스트</h1>
+  <p class="desc">
+    얼굴 사진을 올리면<br>
+    코코 세계관 속 닮은 캐릭터를 랜덤으로 뽑아드립니다!
+  </p>
+
+  <!-- 사진 업로드 -->
+  <div class="card">
+    <div class="section-title">1. 얼굴 사진 찍기 / 업로드</div>
+    <p style="font-size:0.8rem;color:#7A6A50;margin-top:0;">
+      사진은 서버에 저장되지 않고, 내 브라우저 안에서만 사용돼요.
+    </p>
+
+    <img id="myPhoto" alt="내 사진 미리보기">
+    <input type="file" id="photoInput" accept="image/*" capture="user">
+  </div>
+
+  <!-- 결과 카드 -->
+  <div class="card">
+    <div class="section-title">2. 닮은 캐릭터 뽑기</div>
+    <button id="matchBtn" disabled>먼저 사진을 올려주세요</button>
+
+    <p id="resultText"></p>
+    <img id="characterImg" alt="웹툰 캐릭터" style="display:none; margin-top:8px;">
+    <div id="characterTagline" class="tagline"></div>
+
+    <div class="badge">※ 실제 얼굴 인식이 아닌 랜덤 매칭이에요!</div>
+  </div>
+
+  <div class="footer">
+    Made with love · CuteKoko Edition
+  </div>
+
+  <script>
+    // 1) 사진 미리보기
+    const photoInput = document.getElementById('photoInput');
+    const myPhoto = document.getElementById('myPhoto');
+    const matchBtn = document.getElementById('matchBtn');
+
+    photoInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        myPhoto.src = e.target.result;
+        matchBtn.disabled = false;
+        matchBtn.textContent = '코코 닮은 캐릭터 찾기!';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 2) 캐릭터 목록 (나중에 이미지 넣기만 하면 됨)
+    const characters = [
+      { name: '코코', img: '', line: '소심하지만 따뜻한 마음을 가진 아기 호랭이!' },
+      { name: '친구 호랭이 A', img: '', line: '엉뚱하지만 귀여운 매력이 가득!' },
+      { name: '친구 호랭이 B', img: '', line: '말은 적지만 속은 다정한 성격이에요.' }
+    ];
+
+    const resultText = document.getElementById('resultText');
+    const characterImg = document.getElementById('characterImg');
+    const characterTagline = document.getElementById('characterTagline');
+
+    matchBtn.addEventListener('click', function() {
+      if (!myPhoto.src) {
+        alert('먼저 얼굴 사진을 업로드해주세요!');
+        return;
+      }
+
+      const c = characters[Math.floor(Math.random() * characters.length)];
+
+      resultText.textContent = `당신은 「${c.name}」 와 닮았어요!`;
+      characterTagline.textContent = c.line;
+
+      if (c.img && c.img.trim() !== '') {
+        characterImg.src = c.img;
+        characterImg.style.display = 'block';
+      } else {
+        characterImg.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
