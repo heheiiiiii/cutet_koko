@@ -2,19 +2,19 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>닮은 웹툰 캐릭터 찾기 - 코코 에디션</title>
+  <title>코코 닮은꼴 테스트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     * { box-sizing: border-box; }
 
     body {
-      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
       max-width: 480px;
       margin: 0 auto;
       padding: 24px 16px 40px;
-      background: #FFFCEB; /* 파스텔 노랑 */
-      color: #5A4A30; /* 코코 느낌의 브라운 */
+      background: #FFFCEB;
+      color: #5A4A30;
       text-align: center;
     }
 
@@ -33,7 +33,7 @@
     }
 
     .card {
-      background: #FFF8D8; /* 코코 같은 크림 톤 */
+      background: #FFF8D8;
       border-radius: 18px;
       padding: 20px;
       margin-bottom: 20px;
@@ -54,7 +54,7 @@
     }
 
     #myPhoto {
-      background: #FFF3C4; 
+      background: #FFF3C4;
       min-height: 200px;
       object-fit: cover;
       border: 2px dashed #E4D4A0;
@@ -72,7 +72,7 @@
       padding: 12px 16px;
       border-radius: 999px;
       border: none;
-      background: #FFD873; /* 코코 느낌 노랑 */
+      background: #FFD873;
       color: #5A4A30;
       font-size: 1rem;
       font-weight: 700;
@@ -90,6 +90,7 @@
     button:disabled {
       background: #E0D2AC;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     #resultText {
@@ -124,29 +125,41 @@
       color: #9C8F75;
     }
 
+    .test-box {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #7A6A50;
+    }
   </style>
 </head>
 
 <body>
-
   <h1>코코 닮은꼴 테스트</h1>
   <p class="desc">
     얼굴 사진을 올리면<br>
     코코 세계관 속 닮은 캐릭터를 랜덤으로 뽑아드립니다!
   </p>
 
-  <!-- 사진 업로드 -->
+  <!-- 항상 보이는 테스트용 이미지 (coco.png가 여기 떠야 정상) -->
+  <div class="card">
+    <div class="section-title">0. 이미지 경로 테스트</div>
+    <p style="font-size:0.8rem;color:#7A6A50;margin-top:0;">
+      아래 코코 이미지가 보이면 이미지 경로는 정상이에요.
+    </p>
+    <img src="images/coco.png" alt="테스트용 코코 이미지">
+  </div>
+
+  <!-- 1. 사진 업로드 -->
   <div class="card">
     <div class="section-title">1. 얼굴 사진 찍기 / 업로드</div>
     <p style="font-size:0.8rem;color:#7A6A50;margin-top:0;">
-      사진은 서버에 저장되지 않고, 내 브라우저 안에서만 사용돼요.
+      사진은 서버에 저장되지 않고, 이 브라우저 안에서만 사용돼요.
     </p>
-
     <img id="myPhoto" alt="내 사진 미리보기">
     <input type="file" id="photoInput" accept="image/*" capture="user">
   </div>
 
-  <!-- 결과 카드 -->
+  <!-- 2. 결과 카드 -->
   <div class="card">
     <div class="section-title">2. 닮은 캐릭터 뽑기</div>
     <button id="matchBtn" disabled>먼저 사진을 올려주세요</button>
@@ -159,7 +172,7 @@
   </div>
 
   <div class="footer">
-    Made with love · CuteKoko Edition
+    Made with love · Cute Koko Edition
   </div>
 
   <script>
@@ -181,39 +194,34 @@
       reader.readAsDataURL(file);
     });
 
-    // 2) 캐릭터 목록 (나중에 이미지 넣기만 하면 됨)
+    // 2) 캐릭터 목록 (지금은 coco.png 하나만 사용)
     const characters = [
-  {
-    name: '코코',
-    img: 'images/coco.png',
-    line: '소심하지만 마음이 따뜻한 아기 호랭이 코코!'
-  }
-];
-
+      {
+        name: '코코',
+        img: 'images/coco.png',
+        line: '소심하지만 마음 따뜻한 아기 호랭이 코코!'
+      }
+    ];
 
     const resultText = document.getElementById('resultText');
     const characterImg = document.getElementById('characterImg');
     const characterTagline = document.getElementById('characterTagline');
 
+    // 3) 버튼 클릭 시 캐릭터 보여주기
     matchBtn.addEventListener('click', function() {
       if (!myPhoto.src) {
         alert('먼저 얼굴 사진을 업로드해주세요!');
         return;
       }
 
-      const c = characters[Math.floor(Math.random() * characters.length)];
+      const c = characters[0];
 
       resultText.textContent = `당신은 「${c.name}」 와 닮았어요!`;
       characterTagline.textContent = c.line;
 
-      if (c.img && c.img.trim() !== '') {
-        characterImg.src = c.img;
-        characterImg.style.display = 'block';
-      } else {
-        characterImg.style.display = 'none';
-      }
+      characterImg.src = c.img;
+      characterImg.style.display = 'block';
     });
   </script>
-<img src="images/coco1.png" alt="테스트 이미지" style="margin-top:20px; max-width:100%;">
 </body>
 </html>
