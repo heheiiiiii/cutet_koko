@@ -140,14 +140,7 @@
     코코 세계관 속 닮은 캐릭터를 랜덤으로 뽑아드립니다!
   </p>
 
-  <!-- 항상 보이는 테스트용 이미지 (coco.png가 여기 떠야 정상) -->
-  <div class="card">
-    <div class="section-title">0. 이미지 경로 테스트</div>
-    <p style="font-size:0.8rem;color:#7A6A50;margin-top:0;">
-      아래 코코 이미지가 보이면 이미지 경로는 정상이에요.
-    </p>
-    <img src="images/coco.png" alt="테스트용 코코 이미지">
-  </div>
+
 
   <!-- 1. 사진 업로드 -->
   <div class="card">
@@ -196,12 +189,23 @@
 
     // 2) 캐릭터 목록 (지금은 coco.png 하나만 사용)
     const characters = [
-      {
-        name: '코코',
-        img: 'images/coco.png',
-        line: '소심하지만 마음 따뜻한 아기 호랭이 코코!'
-      }
-    ];
+  {
+    name: '코코',
+    img: 'images/coco.png',
+    line: '소심하지만 마음 따뜻한 아기 호랭이 코코!'
+  },
+  {
+    name: '곰',
+    img: 'images/곰.png',
+    line: '엉뚱하지만 귀여운 매력을 가진 코코의 친구!'
+  },
+  {
+    name: '선생님',
+    img: 'images/선생님.png',
+    line: '잔소리도 많지만 제일 많이 챙겨주는 선생님 버전 코코.'
+  }
+];
+
 
     const resultText = document.getElementById('resultText');
     const characterImg = document.getElementById('characterImg');
@@ -209,19 +213,21 @@
 
     // 3) 버튼 클릭 시 캐릭터 보여주기
     matchBtn.addEventListener('click', function() {
-      if (!myPhoto.src) {
-        alert('먼저 얼굴 사진을 업로드해주세요!');
-        return;
-      }
+  if (!myPhoto.src) {
+    alert('먼저 얼굴 사진을 업로드해주세요!');
+    return;
+  }
 
-      const c = characters[0];
+  const randomIndex = Math.floor(Math.random() * characters.length);
+  const c = characters[randomIndex];
 
-      resultText.textContent = `당신은 「${c.name}」 와 닮았어요!`;
-      characterTagline.textContent = c.line;
+  resultText.textContent = `당신은 「${c.name}」 와 닮았어요!`;
+  characterTagline.textContent = c.line;
 
-      characterImg.src = c.img;
-      characterImg.style.display = 'block';
-    });
+  characterImg.src = c.img;
+  characterImg.style.display = 'block';
+});
+
   </script>
 </body>
 </html>
